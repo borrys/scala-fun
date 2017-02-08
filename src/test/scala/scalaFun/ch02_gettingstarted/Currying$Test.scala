@@ -1,6 +1,6 @@
 package scalaFun.ch02_gettingstarted
 
-import org.scalatest.{FlatSpec, FunSuite}
+import org.scalatest.FlatSpec
 
 import scalaFun.ch02_gettingstarted.Currying.{curry, uncurry}
 
