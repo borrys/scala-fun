@@ -68,25 +68,25 @@ class List$Test extends WordSpec {
   "List.dropWhile" when {
     "given empty list" should {
       "return empty list" in {
-        assert(dropWhile(List(), (a: Int) => a > 5) == List())
+        assert(dropWhile(List[Int]())(_ > 5) == List())
       }
     }
 
     "given non-empty list and condition not fulfilled by any element" should {
       "return the whole list" in {
-        assert(dropWhile(List(1, 2, 3, 4), (a: Int) => a > 100) == List(1, 2, 3, 4))
+        assert(dropWhile(List(1, 2, 3, 4))(_ > 100) == List(1, 2, 3, 4))
       }
     }
 
     "given non-empty list and condition fulfilled by initial elements" should {
       "return list without those initial elements" in {
-        assert(dropWhile(List(1, 2, 3, 4), (a: Int) => a < 3) == List(3, 4))
+        assert(dropWhile(List(1, 2, 3, 4))(_ < 3) == List(3, 4))
       }
     }
 
     "given non-empty list and condition fulfilled by elements in the middle" should {
       "return the whole list" in {
-        assert(dropWhile(List(1, 200, 300, 4), (a: Int) => a > 100) == List(1, 200, 300, 4))
+        assert(dropWhile(List(1, 200, 300, 4))(_ > 100) == List(1, 200, 300, 4))
       }
     }
   }
