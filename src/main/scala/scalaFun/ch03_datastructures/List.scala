@@ -63,7 +63,7 @@ object List {
 
   def init[A](l: List[A]): List[A] = {
     @tailrec
-    def dropLast(xs: List[A], acc:List[A] =List()): List[A] = {
+    def dropLast(xs: List[A], acc: List[A] = List()): List[A] = {
       xs match {
         case Nil => sys.error("init on empty list")
         case Cons(_, Nil) => acc
@@ -72,7 +72,7 @@ object List {
     }
 
     @tailrec
-    def reverse(xs: List[A], acc:List[A]):List[A] = {
+    def reverse(xs: List[A], acc: List[A]): List[A] = {
       xs match {
         case Nil => acc
         case Cons(a, t) => reverse(t, Cons(a, acc))
@@ -82,4 +82,27 @@ object List {
     val allButLast = dropLast(l)
     reverse(allButLast, List())
   }
+
+  def length[A](as: List[A]): Int =
+    foldRight(as, 0)((_, acc) => acc + 1)
+
+  @tailrec
+  def foldLeft[A, B](as: List[A], z: B)(f: (B, A) => B): B =
+    as match {
+      case Nil => z
+      case Cons(h, t) => foldLeft(t, f(z, h))(f)
+    }
+
+  def sumLeft(as: List[Int]): Int = foldLeft(as, 0)(_ + _)
+
+  def productLeft(as: List[Double]): Double = foldLeft(as, 1.0)(_ * _)
+
+  def reverse[A](as: List[A]): List[A] = foldLeft(as, List[A]())((acc, a) => Cons(a, acc))
+
+  def append[A](as: List[A], x: A): List[A] =
+    foldRight(as, List(x))(Cons(_, _))
+
+  def concatAll[A](as: List[List[A]]): List[A] =
+    foldRight(as, Nil: List[A])(append)
+
 }

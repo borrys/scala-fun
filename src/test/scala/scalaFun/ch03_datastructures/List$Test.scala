@@ -112,4 +112,88 @@ class List$Test extends WordSpec {
       }
     }
   }
+
+  "List.length" when {
+    "given empty list" should {
+      "return zero" in {
+        assert(length(List()) == 0)
+      }
+    }
+
+    "given list with five elements" should {
+      "return five" in {
+        assert(length(List(1, 2, 3, 4, 5)) == 5)
+      }
+    }
+  }
+
+  "List.foldLeft" when {
+    "given empty list" should {
+      "return initial value" in {
+        assert(foldLeft(List(), "")((b, a) => b.concat(a.toString)) == "")
+      }
+    }
+    "given non-empty list" should {
+      "return result of folding values from left to right" in {
+        assert(foldLeft(List(1, 2, 3), "")((b, a) => b.concat(a.toString)) == "123")
+      }
+    }
+  }
+
+  "List.sumLeft" when {
+    "given list of numbers" should {
+      "return sum of those numbers" in {
+        assert(sumLeft(List(100, 20, 3)) == 123)
+      }
+    }
+  }
+
+  "List.productLeft" when {
+    "given list of numbers" should {
+      "return product of those numbers" in {
+        assert(productLeft(List(5, 6, 7)) == 210)
+      }
+    }
+  }
+
+  "List.reverse" when {
+    "given list of strings" should {
+      "return list of the same strings in reverse order" in {
+        assert(reverse(List("a", "b", "c")) == List("c", "b", "a"))
+      }
+    }
+  }
+
+  "List.append" when {
+    "given empty list" should {
+      "return list with only appended element" in {
+        assert(append(List[Int](), 42) == List(42))
+      }
+    }
+
+    "given non-empty list" should {
+      "return list with new element at the end" in {
+        assert(append(List(1, 2, 3), 42) == List(1, 2, 3, 42))
+      }
+    }
+  }
+
+  "List.concatAll" when {
+    "given empty list" should {
+      "return empty list" in {
+        assert(concatAll(List()) == List())
+      }
+    }
+    "given list with one sublist" should {
+      "return this list" in {
+        assert(concatAll(List(List(1, 2, 3))) == List(1, 2, 3))
+      }
+    }
+
+    "given list with multiple sublists" should {
+      "return list containing elements of all sublists in order" in {
+        assert(concatAll(List(List("a"), List("b", "c"), List("d"))) == List("a", "b", "c", "d"))
+      }
+    }
+  }
 }
