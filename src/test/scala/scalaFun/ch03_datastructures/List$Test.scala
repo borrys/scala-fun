@@ -196,4 +196,118 @@ class List$Test extends WordSpec {
       }
     }
   }
+
+  "List.increment" when {
+    "given list of integers" should {
+      "return list with each element incremented by one" in {
+        assert(increment(List(1, 2, 3, 4)) == List(2, 3, 4, 5))
+      }
+    }
+  }
+
+  "List.asStrings" when {
+    "given list" should {
+      "return list of string representations of all elements" in {
+        assert(asStrings(List(42.0, 13.0)) == List("42.0", "13.0"))
+      }
+    }
+  }
+
+  "List.map" when {
+    "given list of numbers and square function" should {
+      "return list of squared elements of original list" in {
+        assert(map(List(5.0, 11.0, 2.0))(x => x * x) == List(25.0, 121.0, 4.0))
+      }
+    }
+  }
+
+  "List.filter" when {
+    "given list of numbers and predicate checking if number is even" should {
+      "return list containing only even elements in original order" in {
+        assert(filter(List(1, 5, 12, 14, 7))(_ % 2 == 0) == List(12, 14))
+      }
+    }
+  }
+
+  "List.sumWith" when {
+    "given first list empty" should {
+      "return empty list" in {
+        assert(sumWith(List(), List(4, 5, 6)) == List())
+      }
+    }
+    "given second list empty" should {
+      "return empty list" in {
+        assert(sumWith(List(1, 2, 3), List()) == List())
+      }
+    }
+    "given two lists of integers" should {
+      "return list containing sum of corresponding elements" in {
+        assert(sumWith(List(1, 2, 3), List(4, 5, 6)) == List(5, 7, 9))
+      }
+    }
+
+    "given one list shorter than another" should {
+      "return list of length equal to length of shorter list" in {
+        assert(sumWith(List(1, 2, 3), List(4, 5, 6, 7, 8 ,9)) == List(5, 7, 9))
+      }
+    }
+  }
+  "List.startsWith" when {
+    "given empty subsequence" should {
+      "return true" in {
+        assert(startsWith(List(1, 2, 3), List()) == true)
+      }
+    }
+
+    "given empty subsequence matching prefix" should {
+      "return true" in {
+        assert(startsWith(List(1, 2, 3), List(1, 2)) == true)
+      }
+    }
+
+    "given empty subsequence matching suffix" should {
+      "return false" in {
+        assert(startsWith(List(1, 2, 3), List(2, 3)) == false)
+      }
+    }
+
+    "given empty subsequence equal to whole list" should {
+      "return true" in {
+        assert(startsWith(List(1, 2, 3), List(1, 2, 3)) == true)
+      }
+    }
+  }
+
+  "List.hasSubsequence" when {
+    "given list starting with subsequence" should {
+      "return true" in {
+        assert(hasSubsequence(List(1, 2, 3, 4), List(1, 2)) == true)
+      }
+    }
+
+    "given list ending with subsequence" should {
+      "return true" in {
+        assert(hasSubsequence(List(1, 2, 3, 4), List(3, 4)) == true)
+      }
+    }
+
+    "given list containing subsequence in middle" should {
+      "return true" in {
+        assert(hasSubsequence(List(1, 2, 3, 4), List(2, 3)) == true)
+      }
+    }
+
+    "given list not containing subsequence" should {
+      "return false" in {
+        assert(hasSubsequence(List(1, 2, 3, 4), List(8, 9)) == false)
+      }
+    }
+
+    "given empty list and empty subsequence" should {
+      "return true" in {
+        assert(hasSubsequence(List(), List()) == true)
+      }
+    }
+  }
+
 }

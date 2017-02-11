@@ -105,4 +105,50 @@ object List {
   def concatAll[A](as: List[List[A]]): List[A] =
     foldRight(as, Nil: List[A])(append)
 
+  def increment(as: List[Int]): List[Int] =
+    foldRight(as, Nil: List[Int])((a, acc) => Cons(a + 1, acc))
+
+  def asStrings[A](as: List[A]): List[String] =
+    foldRight(as, Nil: List[String])((a, acc) => Cons(a.toString, acc))
+
+  def map[A, B](as: List[A])(f: A => B): List[B] =
+    foldRight(as, Nil: List[B])((a, acc) => Cons(f(a), acc))
+
+  def filter[A](as: List[A])(p: A => Boolean): List[A] =
+    foldRight(as, Nil: List[A])((a, acc) => if (p(a)) Cons(a, acc) else acc)
+
+  def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] =
+    concatAll(map(as)(f))
+
+  def filterViaFlatMap[A](as: List[A])(p: A => Boolean): List[A] =
+    flatMap(as)(a => if (p(a)) List(a) else Nil)
+
+  def sumWith(xs: List[Int], ys: List[Int]): List[Int] =
+    (xs, ys) match {
+      case (Cons(x, tx), Cons(y, ty)) => Cons(x + y, sumWith(tx, ty))
+      case _ => Nil
+    }
+
+  def zipWith[A, B, C](xs: List[A], ys: List[B])(f: (A, B) => C): List[C] =
+    (xs, ys) match {
+      case (Cons(x, tx), Cons(y, ty)) => Cons(f(x, y), zipWith(tx, ty)(f))
+      case _ => Nil
+    }
+
+  @tailrec
+  def startsWith[A](xs: List[A], prefix: List[A]): Boolean = {
+    (xs, prefix) match {
+      case (_, Nil) => true
+      case (Cons(x, tx), Cons(p, tp)) if x == p => startsWith(tx, tp)
+      case _ => false
+    }
+  }
+
+  @tailrec
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
+    sup match {
+      case Nil => sub == Nil
+      case Cons(_, t) => if (startsWith(sup, sub)) true else hasSubsequence(t, sub)
+    }
+  }
 }
