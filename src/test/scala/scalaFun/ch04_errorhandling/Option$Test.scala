@@ -22,4 +22,14 @@ class Option$Test extends FreeSpec {
       assert(variance(List(42.0, 42.0, 42.0, 42.0)) == Some(0.0))
     }
   }
+
+  "sequence" - {
+    "returns Some with list of all internal values" - {
+      assert(Option.sequence(List(Some(1), Some(2), Some(3))) == Some(List(1,2,3)))
+    }
+
+    "returns None for list with at least one None" - {
+      assert(Option.sequence(List(Some(1), None, Some(3))) == None)
+    }
+  }
 }
