@@ -2,7 +2,7 @@ package scalaFun.ch04_errorhandling
 
 import org.scalatest.FreeSpec
 
-import scalaFun.ch04_errorhandling.Option.variance
+import scalaFun.ch04_errorhandling.Option.{sequence, traverse, variance}
 
 class Option$Test extends FreeSpec {
   "variance" - {
@@ -25,11 +25,22 @@ class Option$Test extends FreeSpec {
 
   "sequence" - {
     "returns Some with list of all internal values" - {
-      assert(Option.sequence(List(Some(1), Some(2), Some(3))) == Some(List(1,2,3)))
+      assert(sequence(List(Some(1), Some(2), Some(3))) == Some(List(1, 2, 3)))
     }
 
     "returns None for list with at least one None" - {
-      assert(Option.sequence(List(Some(1), None, Some(3))) == None)
+      assert(sequence(List(Some(1), None, Some(3))) == None)
     }
+  }
+
+  "traverse" - {
+    "returns Some of list containing values transformed with given function" in {
+      assert(traverse(List(1, 2, 3))(i => Some(i * 2)) == Some(List(2, 4, 6)))
+    }
+
+    "returns None when function returns None for at least one of elements in original list" in {
+      assert(traverse(List(1, 2, 3))(i => if (i == 2) None else Some(i)) == None)
+    }
+
   }
 }

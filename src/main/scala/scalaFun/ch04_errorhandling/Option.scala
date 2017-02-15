@@ -39,5 +39,9 @@ object Option {
     mean(xs).flatMap(m => mean(xs.map(x => math.pow(x - m, 2))))
 
   def sequence[A](as: List[Option[A]]): Option[List[A]] =
-    as.foldRight[Option[List[A]]](Some(List()))((a, acc) => map2(a, acc)(_ :: _))
+    traverse(as)(a => a)
+
+  def traverse[A, B](as: List[A])(f: A => Option[B]): Option[List[B]] =
+    as.foldRight[Option[List[B]]](Some(List()))((a, acc) => map2(f(a), acc)(_ :: _))
+
 }
