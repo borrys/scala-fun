@@ -2,6 +2,8 @@ package scalaFun.ch04_errorhandling
 
 import org.scalatest.FreeSpec
 
+import scalaFun.ch04_errorhandling.Option.variance
+
 class OptionTest extends FreeSpec {
   "map" - {
     "on None returns None" in {

@@ -2,9 +2,9 @@ package scalaFun.ch04_errorhandling
 
 import org.scalatest.FreeSpec
 
-import scalaFun.ch04_errorhandling.OptionModule.variance
+import scalaFun.ch04_errorhandling.Option.variance
 
-class OptionModule$Test extends FreeSpec {
+class Option$Test extends FreeSpec {
   "variance" - {
     "returns None for empty input list" in {
       assert(variance(List()) == None)
