@@ -2,6 +2,8 @@ package scalaFun.ch04_errorhandling
 
 import org.scalatest.FreeSpec
 
+import scalaFun.ch04_errorhandling.Either.sequence
+
 class EitherTest extends FreeSpec {
   val left: Either[String, Int] = Left("error")
   val right: Either[String, Int] = Right(42)
@@ -57,6 +59,16 @@ class EitherTest extends FreeSpec {
       val first: Either[String, Int] = Left("first")
       val second: Either[String, Int] = Left("second")
       assert(first.map2(second)(_ + _) == first)
+    }
+  }
+
+  "sequence" - {
+    "for list of Rights returns Right of list" in {
+      assert(sequence(List(Right(1), Right(2))) == Right(List(1, 2)))
+    }
+
+    "for list of Rights and Lefts returns first Left" in {
+      assert(sequence(List(Right(1), Left("first"), Right(2), Left("second"))) == Left("first"))
     }
   }
 }
