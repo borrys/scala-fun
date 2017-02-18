@@ -31,4 +31,24 @@ class StreamTest extends FreeSpec {
       assert(Stream("bar", "baz", "foo", "baf").takeWhile(_.startsWith("b")).toList == List("bar", "baz"))
     }
   }
+
+  "forAll" - {
+    "returns true if all elements in stream matches predicate" in {
+      assert(Stream(1, 2, 3, 4, 5).forAll(_ < 100) == true)
+    }
+
+    "returns false if at least one element does not match predicate" in {
+      assert(Stream(1, 2, 3, 4, 5).forAll(_ != 3) == false)
+    }
+  }
+
+  "headOption" - {
+    "returns None for empty stream" in {
+      assert(empty.headOption.isEmpty)
+    }
+
+    "returns Some of first element for non-empty stream" in {
+      assert(Stream(1, 2, 3, 4).headOption.contains(1))
+    }
+  }
 }

@@ -37,15 +37,14 @@ trait Stream[+A] {
     case _ => this
   }
 
-  def takeWhile(p: A => Boolean): Stream[A] = this match {
-    case Cons(h, t) if p(h()) => cons(h(), t().takeWhile(p))
-    case _ => empty
-  }
+  def takeWhile(p: A => Boolean): Stream[A] =
+    this.foldRight(empty[A])((a, b) => if (p(a)) cons(a, b) else empty)
 
-  def forAll(p: A => Boolean): Boolean = ???
+  def forAll(p: A => Boolean): Boolean =
+    this.foldRight(true)((a, b) => p(a) && b)
 
-  def headOption: Option[A] = ???
-
+  def headOption: Option[A] =
+    this.foldRight[Option[A]](None)((a, _) => Some(a))
 
   def startsWith[B](s: Stream[B]): Boolean = ???
 }
