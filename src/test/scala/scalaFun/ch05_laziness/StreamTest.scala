@@ -51,4 +51,28 @@ class StreamTest extends FreeSpec {
       assert(Stream(1, 2, 3, 4).headOption.contains(1))
     }
   }
+
+  "map" - {
+    "applies function to all arguments" in {
+      assert(Stream(1, 2, 3).map(_ + 1).toList == List(2, 3, 4))
+    }
+  }
+
+  "filter" - {
+    "skips all elements not matching predicate" in {
+      assert(Stream(1, 2, 3, 4, 5).filter(_ % 2 == 0).toList == List(2, 4))
+    }
+  }
+
+  "append" - {
+    "adds all elements to the end of stream" in {
+      assert(Stream(1, 2, 3).append(Stream(4, 5, 6)).toList == List(1, 2, 3, 4, 5, 6))
+    }
+  }
+
+  "flatMap" - {
+    "returns stream of flattened function results" in {
+      assert(Stream(1, 2, 3).flatMap(x => Stream(x, x)).toList == List(1, 1, 2, 2, 3, 3))
+    }
+  }
 }

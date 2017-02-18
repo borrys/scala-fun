@@ -46,6 +46,18 @@ trait Stream[+A] {
   def headOption: Option[A] =
     this.foldRight[Option[A]](None)((a, _) => Some(a))
 
+  def map[B](f: A => B): Stream[B] =
+    this.foldRight(empty[B])((a, z) => cons(f(a), z))
+
+  def filter(p: A => Boolean): Stream[A] =
+    this.foldRight(empty[A])((a, z) => if (p(a)) cons(a, z) else z)
+
+  def append[B >: A](o: => Stream[B]): Stream[B] =
+    this.foldRight(o)((a, z) => cons(a, z))
+
+  def flatMap[B](f: A => Stream[B]): Stream[B] =
+    this.foldRight(empty[B])((a, z) => f(a).append(z))
+
   def startsWith[B](s: Stream[B]): Boolean = ???
 }
 
