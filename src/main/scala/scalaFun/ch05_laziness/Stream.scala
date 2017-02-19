@@ -84,6 +84,9 @@ object Stream {
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] =
     f(z)
-      .map(v => cons(v._1, unfold(v._2)(f)))
+      .map({ case (h, s) => cons(h, unfold(s)(f)) })
       .getOrElse(empty[A])
+
+  def fibs: Stream[Int] =
+    unfold((1, 1))({ case (a, b) => Some((a, (b, a + b))) })
 }

@@ -89,4 +89,10 @@ class StreamTest extends FreeSpec {
       assert(Stream.unfold("initial state")(_ => None).toList == List())
     }
   }
+
+  "fibs" - {
+    "returns fibonacci sequence" in {
+      assert(Stream.fibs.take(6).toList == List(1, 1, 2, 3, 5, 8))
+    }
+  }
 }
