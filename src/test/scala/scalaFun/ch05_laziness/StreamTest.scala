@@ -75,4 +75,18 @@ class StreamTest extends FreeSpec {
       assert(Stream(1, 2, 3).flatMap(x => Stream(x, x)).toList == List(1, 1, 2, 2, 3, 3))
     }
   }
+
+  "unfold" - {
+    "returns infinite stream of generated values" in {
+      assert(Stream.unfold(0)(x => Some(x, x + 1)).take(4).toList == List(0, 1, 2, 3))
+    }
+
+    "returns finite stream of generated values" in {
+      assert(Stream.unfold(10)(x => if (x > 5) Some(x, x - 1) else None).toList == List(10, 9, 8, 7, 6))
+    }
+
+    "returns empty stream" in {
+      assert(Stream.unfold("initial state")(_ => None).toList == List())
+    }
+  }
 }
