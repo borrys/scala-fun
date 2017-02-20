@@ -25,11 +25,12 @@ trait Stream[+A] {
     case Empty => List()
   }
 
-  def take(n: Int): Stream[A] = this match {
-    case Cons(h, t) if n > 1 => cons(h(), t().take(n - 1))
-    case Cons(h, _) if n == 1 => cons(h(), empty)
-    case _ => empty
-  }
+  def take(n: Int): Stream[A] =
+    unfold((this, n)) {
+      case (Cons(h, t), 1) => Some(h(), (empty, 0))
+      case (Cons(h, t), nn) => Some(h(), (t(), nn - 1))
+      case _ => None
+    }
 
   @tailrec
   final def drop(n: Int): Stream[A] = this match {
@@ -38,7 +39,10 @@ trait Stream[+A] {
   }
 
   def takeWhile(p: A => Boolean): Stream[A] =
-    this.foldRight(empty[A])((a, b) => if (p(a)) cons(a, b) else empty)
+    unfold(this) {
+      case Cons(h, t) if p(h()) => Some(h(), t())
+      case _ => None
+    }
 
   def forAll(p: A => Boolean): Boolean =
     this.foldRight(true)((a, b) => p(a) && b)
@@ -47,7 +51,10 @@ trait Stream[+A] {
     this.foldRight[Option[A]](None)((a, _) => Some(a))
 
   def map[B](f: A => B): Stream[B] =
-    this.foldRight(empty[B])((a, z) => cons(f(a), z))
+    unfold(this) {
+      case Cons(h, t) => Some((f(h()), t()))
+      case Empty => None
+    }
 
   def filter(p: A => Boolean): Stream[A] =
     this.foldRight(empty[A])((a, z) => if (p(a)) cons(a, z) else z)
@@ -57,6 +64,12 @@ trait Stream[+A] {
 
   def flatMap[B](f: A => Stream[B]): Stream[B] =
     this.foldRight(empty[B])((a, z) => f(a).append(z))
+
+  def zipWith[B, C](bs: Stream[B])(f: (A, B) => C): Stream[C] =
+    unfold((this, bs)) {
+      case (Cons(h1, t1), Cons(h2, t2)) => Some((f(h1(), h2()), (t1(), t2())))
+      case _ => None
+    }
 
   def startsWith[B](s: Stream[B]): Boolean = ???
 }
