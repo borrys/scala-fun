@@ -95,4 +95,14 @@ class StreamTest extends FreeSpec {
       assert(Stream.fibs.take(6).toList == List(1, 1, 2, 3, 5, 8))
     }
   }
+
+  "startsWith" - {
+    "determines that stream starts with another" in {
+      assert(Stream(1, 2, 3).startsWith(Stream(1, 2)))
+    }
+
+    "determines that stream does not start with another" in {
+      assert(!Stream(1, 2, 3).startsWith(Stream(5, 6)))
+    }
+  }
 }
